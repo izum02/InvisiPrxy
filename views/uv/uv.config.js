@@ -9,4 +9,23 @@ self['{{__uv$config}}'] = {
   bundle: '{{route}}{{/uv/uv.bundle.js}}',
   config: '{{route}}{{/uv/uv.config.js}}',
   sw: '{{route}}{{/uv/uv.sw.js}}',
+  inject: [
+    {
+      host: '.*',
+      injectTo: 'head',
+      html: `
+        <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+        <script>
+          // DOMContentLoadedを待つ
+          (function waitForEruda() {
+            if (document.readyState === 'complete') {
+              eruda.init();
+            } else {
+              document.addEventListener('DOMContentLoaded', () => eruda.init());
+            }
+          })();
+        </script>
+      `
+    }
+  ]
 };
